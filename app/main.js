@@ -9,7 +9,24 @@ const checkBalance = require('../service/checkBalance');
 const getTransactionReceipt = require('../service/getTransactionReceipt');
 const sendTransaction = require('../service/sendTransaction');
 
-const main = async (colors, privateKeys, rpcUrl, chainID, ticker='ETH', amountToSend=0.00001, transactionCount=10, gasMin=0.0009, gasMax=0.0015, isRandomSending=true, listReceiverAddress=[''], minimumBalance=0.000001) => {
+// Directory : helper
+const getListWallet = require('../helper/getListWallet');
+
+const main = async (colors, path, directory) => {
+    const { 
+        privateKeys,
+        rpcUrl,
+        chainID,
+        ticker,
+        amountToSend,
+        transactionCount,
+        gasMin,
+        gasMax,
+        isRandomSending,
+        listReceiverAddress,
+        minimumBalance
+    } = getListWallet(path.join(__dirname, '..',directory), colors, path);
+
     const provider = new ethers.JsonRpcProvider(rpcUrl);
 
     for (const privateKey of privateKeys) {
