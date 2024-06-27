@@ -13,7 +13,7 @@ const checkBalance = require('../service/checkBalance');
 const getTransactionReceipt = require('../service/getTransactionReceipt');
 const sendTransaction = require('../service/sendTransaction');
 
-const main = async (colors, privateKeys, rpcUrl, chainID, ticker, amountToSend, transactionCount, isRandomSending, listReceiverAddress) => {
+const main = async (colors, privateKeys, rpcUrl, chainID, ticker, amountToSend, transactionCount, isRandomSending, listReceiverAddress, minimumBalance='0.01') => {
     clearScreen()
     banner(colors);
 
@@ -33,7 +33,7 @@ const main = async (colors, privateKeys, rpcUrl, chainID, ticker, amountToSend, 
             continue;
         }
 
-        if (senderBalance < ethers.parseUnits('0.01', 'ether')) {
+        if (senderBalance < ethers.parseUnits(minimumBalance, 'ether')) {
             console.log(colors.white(` > ${colors.red('Insufficient or zero balance')}. Skipping to next address.`));
             continue;
         }
@@ -44,7 +44,7 @@ const main = async (colors, privateKeys, rpcUrl, chainID, ticker, amountToSend, 
                 try {
                     senderBalance = await retry(() => checkBalance(provider, senderAddress), colors);
                     console.log(colors.white(` > Current Balance: ${colors.cyan(ethers.formatUnits(senderBalance,'ether'))} ${ticker}`));
-                    if (senderBalance < ethers.parseUnits('0.01', 'ether')) {
+                    if (senderBalance < ethers.parseUnits(minimumBalance, 'ether')) {
                         console.log(colors.white(` > ${colors.red('Insufficient balance')} for transactions.`));
                         continuePrintingBalance = false;
                     }
