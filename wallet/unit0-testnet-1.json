@@ -1,0 +1,15 @@
+{
+    "privateKeys": [
+        ""
+    ],
+    "rpcUrl": "https://rpc-testnet.unit0.dev",
+    "chainID": 88817,
+    "ticker": "UNIT0",
+    "amountToSend": 0.000001,
+    "transactionCount": 1000,
+    "gasMin": 0.0009,
+    "gasMax": 0.0015,
+    "isRandomSending": true,
+    "listReceiverAddress": [""],
+    "minimumBalance": 0.00001
+}

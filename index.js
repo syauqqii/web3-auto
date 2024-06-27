@@ -1,37 +1,16 @@
-const main = require('./app/main');
+const path = require('path');
 const colors = require('colors');
 
-// Setting private key
-const privateKeys = [
-    '',
-    ''
-];
+// Directory : app
+const main = require('./app/main');
 
-// Settings for network
-const rpcUrl = 'https://rpc-testnet.unit0.dev';
-const chainID = 88817
-const ticker = 'UNIT0'
+// Directory : helper
+const getListWallet = require('./helper/getListWallet');
 
-/* Settings for sending transactions
- *
- * if 'isRandomSending' is true
- *  forget about 'listReceiverAddress'
- * else
- *  fill the 'listReceiverAddress'
- */
-const amountToSend = 0.000001;
-const transactionCount = 1000;
-const isRandomSending = false;
-const listReceiverAddress = [
-    '',
-    '',
-    '',
-    ''
-];
+const { 
+    privateKeys, rpcUrl, chainID, ticker, amountToSend, transactionCount, gasMin, gasMax, isRandomSending, listReceiverAddress, minimumBalance 
+} = getListWallet(path.join(__dirname, 'wallet'), colors, path);
 
-// Setting minimum balance for transaction
-const minimumBalance = '0.00001';
-
-main(colors, privateKeys, rpcUrl, chainID, ticker, amountToSend, transactionCount, isRandomSending, listReceiverAddress, minimumBalance).catch((error) => {
+main(colors, privateKeys, rpcUrl, chainID, ticker, amountToSend, transactionCount, gasMin, gasMax, isRandomSending, listReceiverAddress, minimumBalance.toString()).catch((error) => {
     console.error(`${colors.white(' > An unexpected error occurred:')}\n${colors.red(error)}`);
 });

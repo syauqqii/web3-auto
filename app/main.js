@@ -1,10 +1,6 @@
 const { ethers } = require('ethers');
 
-// Directory: config
-const banner = require('../config/banner');
-
 // Directory: helper
-const clearScreen = require('../helper/clearScreen');
 const sleep = require('../helper/sleep');
 const retry = require('../helper/retry');
 
@@ -13,10 +9,7 @@ const checkBalance = require('../service/checkBalance');
 const getTransactionReceipt = require('../service/getTransactionReceipt');
 const sendTransaction = require('../service/sendTransaction');
 
-const main = async (colors, privateKeys, rpcUrl, chainID, ticker, amountToSend, transactionCount, isRandomSending, listReceiverAddress, minimumBalance='0.01') => {
-    clearScreen()
-    banner(colors);
-
+const main = async (colors, privateKeys, rpcUrl, chainID, ticker='ETH', amountToSend=0.00001, transactionCount=10, gasMin=0.0009, gasMax=0.0015, isRandomSending=true, listReceiverAddress=[''], minimumBalance=0.000001) => {
     const provider = new ethers.JsonRpcProvider(rpcUrl);
 
     for (const privateKey of privateKeys) {
@@ -33,7 +26,7 @@ const main = async (colors, privateKeys, rpcUrl, chainID, ticker, amountToSend, 
             continue;
         }
 
-        if (senderBalance < ethers.parseUnits(minimumBalance, 'ether')) {
+        if (senderBalance < ethers.parseUnits(minimumBalance.toString(), 'ether')) {
             console.log(colors.white(` > ${colors.red('Insufficient or zero balance')}. Skipping to next address.`));
             continue;
         }
@@ -44,7 +37,7 @@ const main = async (colors, privateKeys, rpcUrl, chainID, ticker, amountToSend, 
                 try {
                     senderBalance = await retry(() => checkBalance(provider, senderAddress), colors, 'checkBalance');
                     console.log(colors.white(` > Current Balance: ${colors.cyan(ethers.formatUnits(senderBalance,'ether'))} ${ticker}`));
-                    if (senderBalance < ethers.parseUnits(minimumBalance, 'ether')) {
+                    if (senderBalance < ethers.parseUnits(minimumBalance.toString(), 'ether')) {
                         console.log(colors.white(` > ${colors.red('Insufficient balance')} for transactions.`));
                         continuePrintingBalance = false;
                     }
@@ -70,7 +63,7 @@ const main = async (colors, privateKeys, rpcUrl, chainID, ticker, amountToSend, 
             }
 
             const amountToSendInEther = ethers.parseUnits(amountToSend.toString(),'ether');
-            const gasPrice = ethers.parseUnits((Math.random() * (0.0015 - 0.0009) + 0.0009).toFixed(9).toString(), 'gwei');
+            const gasPrice = ethers.parseUnits((Math.random() * (gasMax - gasMin) + gasMin).toFixed(9).toString(), 'gwei');
 
             const transaction = {
                 to: receiverAddress,
