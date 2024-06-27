@@ -20,7 +20,7 @@ const ticker = 'UNIT0'
  *  fill the 'listReceiverAddress'
  */
 const amountToSend = 0.000001;
-const transactionCount = 500;
+const transactionCount = 1000;
 const isRandomSending = false;
 const listReceiverAddress = [
     '',
@@ -33,5 +33,5 @@ const listReceiverAddress = [
 const minimumBalance = '0.00001';
 
 main(colors, privateKeys, rpcUrl, chainID, ticker, amountToSend, transactionCount, isRandomSending, listReceiverAddress, minimumBalance).catch((error) => {
-    console.error(colors.white(' > An unexpected error occurred:'), colors.red(error));
+    console.error(`${colors.white(' > An unexpected error occurred:')}\n${colors.red(error)}`);
 });

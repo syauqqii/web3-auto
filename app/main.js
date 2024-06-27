@@ -27,7 +27,7 @@ const main = async (colors, privateKeys, rpcUrl, chainID, ticker, amountToSend, 
 
         let senderBalance;
         try {
-            senderBalance = await retry(() => checkBalance(provider, senderAddress), colors);
+            senderBalance = await retry(() => checkBalance(provider, senderAddress), colors, 'checkBalance');
         } catch (error) {
             console.log(colors.red(` > Failed to check balance for ${senderAddress}. Skipping to next address.`));
             continue;
@@ -42,7 +42,7 @@ const main = async (colors, privateKeys, rpcUrl, chainID, ticker, amountToSend, 
         const printSenderBalance = async () => {
             while (continuePrintingBalance) {
                 try {
-                    senderBalance = await retry(() => checkBalance(provider, senderAddress), colors);
+                    senderBalance = await retry(() => checkBalance(provider, senderAddress), colors, 'checkBalance');
                     console.log(colors.white(` > Current Balance: ${colors.cyan(ethers.formatUnits(senderBalance,'ether'))} ${ticker}`));
                     if (senderBalance < ethers.parseUnits(minimumBalance, 'ether')) {
                         console.log(colors.white(` > ${colors.red('Insufficient balance')} for transactions.`));
@@ -82,7 +82,7 @@ const main = async (colors, privateKeys, rpcUrl, chainID, ticker, amountToSend, 
 
             let tx;
             try {
-                tx = await sendTransaction(wallet, transaction);
+                tx = await retry(() => sendTransaction(wallet, transaction), colors, 'sendTransaction');
             } catch (error) {
                 console.log(colors.white(` > Failed to send transaction: ${colors.red(error.shortMessage)}`));
                 i -= 1;
@@ -100,7 +100,7 @@ const main = async (colors, privateKeys, rpcUrl, chainID, ticker, amountToSend, 
 
             let receipt;
             try {
-                receipt = await retry(() => getTransactionReceipt(provider, tx.hash), colors);
+                receipt = await retry(() => getTransactionReceipt(provider, tx.hash), colors, 'getTransactionReceipt');
                 if (receipt) {
                     if (receipt.status === 1) {
                         console.log(colors.white(` > Transaction ${colors.green('Success')}`));
@@ -110,7 +110,7 @@ const main = async (colors, privateKeys, rpcUrl, chainID, ticker, amountToSend, 
                         console.log(colors.white(` > Transaction ${colors.red('Failed')}\n`));
                     }
                 } else {
-                    console.log(colors.yellow(' > Transaction Pending, after multiple retries.\n'));
+                    console.log(colors.white(` > Transaction ${colors.yellow('Pending')}, after Transaction ${colors.yellow('multiple retries')}.\n`));
                 }
             } catch (error) {
                 console.log(colors.red(` > Error checking transaction status: ${error.shortMessage}\n`));
