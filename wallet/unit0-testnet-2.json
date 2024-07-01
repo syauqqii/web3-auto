@@ -11,10 +11,10 @@
     "gasMax": 0.0015,
     "isRandomSending": false,
     "listReceiverAddress": [
-        "0xF40796F5EB778cDe506A185612a966Eb0A04308F",
-        "0x55eA21F4988D8c794deD743f9b6142F18CeFB5a4",
-        "0x8cB65dD8e9b2364eeF46e84E11033A0264194886",
-        "0x55eC9c9008521B1498Be925cb65f29c0d1e79aF2"
+        "0x",
+        "0x",
+        "0x",
+        "0x"
     ],
     "minimumBalance": 0.00001
 }

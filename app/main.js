@@ -59,7 +59,7 @@ const main = async (colors, path, directory) => {
                         continuePrintingBalance = false;
                     }
                 } catch (error) {
-                    console.log(colors.while(` > Failed to check balance: ${colors.red(error.shortMessage)}`));
+                    console.log(colors.white(` > Failed to check balance: ${colors.red(error.shortMessage)}`));
                 }
                 await sleep(5000);
             }
