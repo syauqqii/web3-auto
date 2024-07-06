@@ -44,6 +44,7 @@ use this format:
     "minimumBalance": 0.00001
 }
 
+*NOTE: if isRandomSending is false, then fill listReceiverAddress with ur address or random VALID address
 save and back to root folder
 ```
 
